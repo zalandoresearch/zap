@@ -1,0 +1,44 @@
+1	The	the	DET	DT	_	2	det	_	_	_	_	_	_	_	_
+2	NASA	NASA	PROPN	NNP	_	9	nsubj	_	_	_	_	A0	_	A0	_
+3	and	and	CCONJ	CC	_	2	cc	_	_	_	_	_	_	_	_
+4	the	the	DET	DT	_	7	det	_	_	_	_	_	_	_	_
+5	European	european	PROPN	NNP	_	7	compound	_	_	_	_	_	_	_	_
+6	Space	Space	PROPN	NNP	_	7	compound	_	_	_	_	_	_	_	_
+7	Agency	Agency	PROPN	NNP	_	2	conj	_	_	_	_	_	_	_	_
+8	both	both	DET	DT	_	2	dep	_	_	_	_	_	_	_	_
+9	launch	launch	VERB	VBP	_	0	root	_	_	Y	launch.01	_	_	_	_
+10	missions	mission	NOUN	NNS	_	9	dobj	_	_	Y	mission.01	A1	_	_	_
+11	to	to	ADP	IN	_	12	case	_	_	_	_	_	_	_	_
+12	Mars	Mars	PROPN	NNP	_	10	nmod	_	_	_	_	_	A2	_	_
+13	this	this	DET	DT	_	14	det	_	_	_	_	_	_	_	_
+14	month	month	NOUN	NN	_	9	nmod:tmod	_	_	_	_	AM-TMP	_	_	_
+15	sending	send	VERB	VBG	_	9	xcomp	_	_	Y	send.01	AM-PRD	_	_	_
+16	rovers	rover	NOUN	NNS	_	15	dobj	_	_	_	_	_	_	A1	A0
+17	and	and	CCONJ	CC	_	16	cc	_	_	_	_	_	_	_	_
+18	ashters	ashter	NOUN	NNS	_	16	conj	_	_	_	_	_	_	_	_
+19	to	to	ADP	TO	_	20	mark	_	_	_	_	_	_	_	_
+20	probe	probe	VERB	VB	_	16	acl	_	_	Y	probe.01	_	_	AM-PRP	_
+21	the	the	DET	DT	_	23	det	_	_	_	_	_	_	_	_
+22	Red	Red	PROPN	NNP	_	23	compound	_	_	_	_	_	_	_	_
+23	Planet	planet	PROPN	NNP	_	20	dobj	_	_	_	_	_	_	_	A1
+24	.	.	PUNCT	.	_	0	punct	_	_	_	_	_	_	_	_
+
+1	One	one	NUM	CD	_	8	nsubj	_	_	_	_	A1	_	_
+2	of	of	ADP	IN	_	5	case	_	_	_	_	_	_	_
+3	the	the	DET	DT	_	5	det	_	_	_	_	_	_	_
+4	big	big	ADJ	JJ	_	5	amod	_	_	_	_	_	_	_
+5	questions	question	NOUN	NNS	_	1	nmod	_	_	_	_	_	_	_
+6	about	about	ADP	IN	_	7	case	_	_	_	_	_	_	_
+7	Mars	Mars	PROPN	NNP	_	5	nmod	_	_	_	_	_	_	_
+8	is	be	VERB	VBZ	_	0	root	_	_	Y	be.01	_	_	_
+9	when	when	ADV	WRB	_	16	advmod	_	_	_	_	_	AM-TMP	_
+10	or	or	CCONJ	CC	_	9	cc	_	_	_	_	_	_	_
+11	whether	whether	ADP	IN	_	9	dep	_	_	_	_	_	_	_
+12	humans	human	NOUN	NNS	_	16	nsubj	_	_	_	_	_	A1	A0
+13	will	will	AUX	MD	_	16	aux	_	_	_	_	_	AM-MOD	_
+14	ever	ever	ADV	RB	_	16	advmod	_	_	_	_	_	AM-TMP	_
+15	be	be	VERB	VB	_	16	cop	_	_	Y	be.01	_	_	_
+16	able	able	ADJ	JJ	_	8	advcl	_	_	_	_	A2	A2	_
+17	to	to	ADP	TO	_	18	mark	_	_	_	_	_	_	_
+18	visit	visit	VERB	VB	_	16	xcomp	_	_	Y	visit.01	_	_	_
+19	.	.	PUNCT	.	_	0	punct	_	_	_	_	_	_	_

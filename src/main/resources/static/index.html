@@ -1,0 +1,406 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Translation Transfer</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="http://code.jquery.com/jquery-2.2.0.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <script type="text/javascript" src="d3.js"></script>
+
+    <script src="transfer-demo.js"></script>
+
+    <style>
+        .spinner {
+              width: 100px;
+        }
+
+        .spinner input {
+              text-align: right;
+        }
+
+        .input-group-btn-vertical {
+              position: relative;
+              white-space: nowrap;
+              width: 1%;
+              vertical-align: middle;
+              display: table-cell;
+        }
+
+        .input-group-btn-vertical > .btn {
+              display: block;
+              float: none;
+              width: 100%;
+              max-width: 100%;
+              padding: 8px;
+              margin-left: -1px;
+              position: relative;
+              border-radius: 0;
+        }
+
+        .input-group-btn-vertical > .btn:first-child {
+              border-top-right-radius: 4px;
+        }
+
+        .input-group-btn-vertical > .btn:last-child {
+              margin-top: -2px;
+              border-bottom-right-radius: 4px;
+        }
+
+        .input-group-btn-vertical i{
+              position: absolute;
+              top: 0;
+              left: 4px;
+        }
+
+        .centered {
+        text-align: center;
+        }
+
+        .button {
+        position: absolute;
+        top: 50%;
+        }
+
+        .text {
+        font-family: 'Lora', sans-serif;
+        }
+
+        .frame_label_source {
+            font-size: 95%;
+            font-variant: small-caps;
+            fill:none;
+        }
+
+        .frame_label_predicted {
+            font-size: 95%;
+            font-variant: small-caps;
+            fill:none;
+        }
+
+
+        .frame_label_projected {
+            font-size: 95%;
+            font-variant: small-caps;
+            fill:none;
+        }
+
+
+        <!--.frame_rect1{-->
+            <!--fill:red;-->
+            <!--opacity:0.1;-->
+        <!--}-->
+
+        <!--.token_rect{-->
+         <!--fill:none;-->
+        <!--}-->
+
+        .pos_source {
+        font-size: 80%;
+        }
+        .pos_predicted {
+        font-size: 80%;
+        }
+        .pos_projected {
+        font-size: 80%;
+        }
+
+        .deprel_source {
+        font-size: 85%;
+        }
+        .deprel_projected {
+        fill:blue;
+        font-size: 85%;
+        }
+        .deprel_predicted {
+        fill:red;
+        font-size: 85%;
+        }
+
+
+        .dependency_source {
+         fill:none;
+        }
+        .dependency_projected {
+         fill:none;
+         stroke:blue;
+        }
+        .dependency_predicted {
+         fill:none;
+         stroke:red;
+        }
+
+        #exTab2 h3 {
+          color : white;
+          background-color: #428bca;
+          padding : 5px 15px;
+        }
+
+        .my-group .form-control{
+            width:50%;
+        }
+
+        div#visu {
+            <!--height: 200px;-->
+            <!--width: 150px;-->
+            <!--border:2px solid #000;-->
+            overflow: scroll;
+        }
+
+
+
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy" data-offset="15">
+
+<div style="height:100%; margin-left: 10px; margin-right: 10px;">
+
+    <div class="container">
+        <div class="row">
+            <div class="navbar navbar-default" style="height:5%;" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img style="max-width:100px; margin-top: -8px;"
+                                                          src="zalando-research-logo.png"></a>
+
+                </div>
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="col-md-8">
+
+                    <div>
+                        <br>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div id="targetLanguageDiv">
+                                <b> Target Language (TL): </b>
+                                <br>
+                                <div class="input-group spinner" style="z-index:100;width: 100%">
+
+                                    <div class="input-group-btn">
+                                        <select id="targetLanguage" name="targetLanguage"
+                                                class="selectpicker form-control"
+                                                style="width: 100px">
+                                            <option value="french">French</option>
+                                            <option value="german" selected>German</option>
+                                            <option value="spanish">Spanish</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group spinner" style="z-index:100;width: 100%">
+
+                                <!--<div class="input-group-btn">-->
+                                <!--<select id="input" name="input"-->
+                                <!--class="selectpicker form-control"-->
+                                <!--style="width: 100px">-->
+                                <!--<option value="manual" selected>Manual</option>-->
+                                <!--<option value="gold-sl">Gold SL Corpus</option>-->
+                                <!--<option value="gold-Tl">Gold TL Corpus</option>-->
+                                <!--</select>-->
+                                <!--</div>-->
+
+                                <input type="text" id="no" name="no" class="form-control" value="1"
+                                       style="width: 50px;visibility:hidden">
+                                <div id="arrows" class="input-group-btn-vertical pull-left" style="visibility:hidden">
+                                    <button class="btn btn-default " type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <input style="display:none" id='f' type='file'/>
+
+
+                            <!--<b> Input: </b>-->
+                            <br>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <b> Execute: </b>
+                            <br>
+                            <button class="btn btn-default" onclick="query()">GO!</button>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <br>
+                        <hr>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="sentence">SL Sentence:</label>
+                        <div class="input-group" style="width: 100%">
+                            <input class="form-control" id="sentence" type="text">
+                        </div>
+
+                        <br>
+
+                        <label for="translation">TL Sentence:</label>
+                        <div class="input-group" style="width: 100%">
+
+                            <input class="form-control" id="translation" type="text">
+                        </div>
+                    </div>
+
+                    <!--<label for="input">SL Sentence:</label>-->
+                    <div class="input-group" style="width: 100%;visibility:hidden">
+                        <input class="form-control" id="input" type="text">
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div>
+                        <br>
+                        <!--<hr>-->
+                        <label>Source:</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox"
+                                      id="show_source_pos" onclick="updateVisualization();" checked>POS</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox"
+                                      id="show_source_deps" onclick="updateVisualization();"
+                                      checked>dependencies</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox"
+                                      id="show_source_ner" onclick="updateVisualization();" checked>NER</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox"
+                                      id="show_source_srl" onclick="updateVisualization();" checked>frames</label>
+                    </div>
+                    <div>
+                        <hr>
+                        <label>Alignments:</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" onclick="toggle_visibility('.alignment');"
+                                      checked>alignment</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div>
+                        <br>
+                        <!--<hr>-->
+                        <label>Target PoS:</label>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"> <input type="checkbox"
+                                                               id="show_projected_pos"
+                                                               onclick="updateVisualization();">project</label>
+
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_predicted_pos"
+                                                              onclick="updateVisualization();">predict</label>
+                    </div>
+                    <div>
+                        <hr>
+                        <label>Target Dependencies:</label>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_projected_deps"
+                                                              onclick="updateVisualization();">project</label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_predicted_deps"
+                                                              onclick="updateVisualization();">predict</label>
+                    </div>
+                    <div>
+                        <hr>
+                        <label>Target NER:</label>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_projected_ner"
+                                                              onclick="updateVisualization()">project</label>
+                    </div>
+                    <div>
+                        <hr>
+                        <label>Target SRL:</label>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_projected_srl"
+                                                              onclick="updateVisualization()">project</label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                                                              id="show_predicted_srl"
+                                                              onclick="updateVisualization()">predict</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <br>
+
+            <div id="visu">
+                <svg width="100%" height="460">
+                    <!--<rect x="0" y="0" width="100%" height="450" stroke="#000000" stroke-width="2"-->
+                    <!--fill="#EFFFFF"></rect>-->
+                    <rect x="0" y="0" width="100%" height="450" stroke="gray" stroke-width="1"
+                          fill="white"></rect>
+
+                    <text id="label-text" x="10" y="123" stroke-width="1" stroke="#000000" font-family="sans-serif"
+                          font-size="15"> S:
+                    </text>
+
+                    <text id="svg-text" x="50" y="123" font-family="sans-serif" font-size="19"></text>
+
+                    <text id="label-hyp" x="10" y="340" stroke-width="1" stroke="#000000" font-family="sans-serif"
+                          font-size="15"> T:
+                    </text>
+
+                    <text id="svg-hyp" x="50" y="340" font-family="sans-serif" font-size="19"></text>
+                </svg>
+            </div>
+
+            <div>
+                <br>
+                <hr>
+
+            </div>
+            <div>
+                <br>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
