@@ -118,22 +118,27 @@ public class PipelineWrapper {
             try {
                 String srlModel = "srl-english.model";
                 InputStream cpResource = this.getClass().getClassLoader().getResourceAsStream("models/" + srlModel);
-                File tmpFile = null;
-                try {
-                    tmpFile = File.createTempFile("file", "temp");
-                    FileUtils.copyInputStreamToFile(cpResource, tmpFile); // FileUtils from apache-io
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (tmpFile != null)
+                System.out.println("cpResource = " + cpResource);
+                if (cpResource != null) {
+                    File tmpFile = null;
                     try {
-                        String absolutePath = tmpFile.getAbsolutePath();
-                        zipFile = new ZipFile(absolutePath);
-                        semanticRoleLabeler = Pipeline.fromZipFile(zipFile);
-                        zipFile.close();
-                    } finally {
-                        boolean delete = tmpFile.delete();
+                        tmpFile = File.createTempFile("file", "temp");
+                        FileUtils.copyInputStreamToFile(cpResource, tmpFile); // FileUtils from apache-io
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                    if (tmpFile != null)
+                        try {
+                            String absolutePath = tmpFile.getAbsolutePath();
+                            zipFile = new ZipFile(absolutePath);
+                            semanticRoleLabeler = Pipeline.fromZipFile(zipFile);
+                            zipFile.close();
+                        } finally {
+                            boolean delete = tmpFile.delete();
+                        }
+                } else {
+                    // print warning
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -218,7 +223,7 @@ public class PipelineWrapper {
             }
 
             // Only English currently has SRL
-            if (language.equals(Language.ENGLISH)) {
+            if (language.equals(Language.ENGLISH) && semanticRoleLabeler != null) {
                 se.lth.cs.srl.corpus.Sentence s = new se.lth.cs.srl.corpus.Sentence(
                         prepareFields(parse.getTexts()),
                         prepareFields(parse.getLemmas()),
