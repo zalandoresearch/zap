@@ -1,13 +1,14 @@
 package zalando.analytics.corpus;
 
 import java.io.*;
+import java.util.Iterator;
 
 /**
  * Simple helper class for reading a text file line by line.
  * <p>
  * Created by Alan Akbik on 3/3/17.
  */
-public class LineReader {
+public class LineReader implements Iterable<String> {
 
     // Internal reader
     BufferedReader parseReader;
@@ -68,4 +69,40 @@ public class LineReader {
         }
         return null;
     }
+
+    @Override
+    public Iterator<String> iterator() {
+        return new Iterator<String>() {
+
+            @Override
+            public boolean hasNext() {
+                try {
+                    parseReader.mark(1);
+                    if (parseReader.read() < 0) {
+                        return false;
+                    }
+                    parseReader.reset();
+                    return true;
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String next() {
+                try {
+                    return parseReader.readLine();
+                } catch (IOException e) {
+                    return null;
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+        };
+    }
+
 }
