@@ -116,7 +116,7 @@ public class PipelineWrapper {
             // init MateSRL for English
             ZipFile zipFile = null;
             try {
-                String srlModel = "srl-english.bigmodel";
+                String srlModel = "srl-english.model";
                 InputStream cpResource = this.getClass().getClassLoader().getResourceAsStream("models/" + srlModel);
                 System.out.println("cpResource = " + cpResource);
                 if (cpResource != null) {
