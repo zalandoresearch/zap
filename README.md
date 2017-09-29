@@ -56,7 +56,7 @@ To parse an English sentence, simply instantiate the PipelineWrapper object for 
 PipelineWrapper pipeline = new PipelineWrapper(Language.ENGLISH);
 
 // use pipeline to parse English sentence provided as string
-Sentence parse = pipeline.parse("The big man ate a sandwich.");
+Sentence parse = pipeline.parse("The cat was eating cheese.");
 ```
 
 ### Parse a sentence in German
@@ -68,7 +68,7 @@ If you want to parse a sentence in another language, simply pass another Languag
  PipelineWrapper pipeline = new PipelineWrapper(Language.GERMAN);
  
 // use pipeline to parse German sentence provided as string
- Sentence parse = pipeline.parse("Wo sind all die Blumen hin ?");
+ Sentence parse = pipeline.parse("Die Katze aß gerade Käse.");
  ```
 
 ### Create and align a bi-sentence
@@ -82,10 +82,10 @@ source sentence and initialize the German target sentence without annotations (i
 PipelineWrapper pipeline = new PipelineWrapper(Language.ENGLISH);
 
 // use pipeline to parse English sentence provided as string
-Sentence sourceSentence = pipeline.parse("The big man ate a sandwich.");
+Sentence sourceSentence = pipeline.parse("The cat was eating cheese.");
 
 // initialize German target sentence without annotations
-Sentence targetSentence = Sentence.fromTokenized("Wo sind all die Blumen hin ?");
+Sentence targetSentence = Sentence.fromTokenized("Die Katze aß gerade Käse .");
 
 // create BiSentence object holding source and target Sentence
 BiSentence biSentence = new BiSentence(sourceSentence, targetSentence);
@@ -102,7 +102,7 @@ HeuristicAligner aligner = HeuristicAligner.getInstance(Language.GERMAN);
 biSentence.align(aligner);
 
 // print alignment
-System.out.println(biSentence)
+System.out.println(biSentence);
 ```
 
 If you print the alignment, you should get something like this:
