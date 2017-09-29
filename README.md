@@ -38,9 +38,9 @@ This readme briefly illustrates their usage.
 All you need to do is add this dependency to your project's `pom.xml` file:
 ```xml
 <dependency>
-    <groupId>zalando.analytics</groupId>
+    <groupId>org.zalando.research</groupId>
     <artifactId>zap</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 </dependency>
 ```
 And you're set to get started!

@@ -19,7 +19,7 @@ public class TranslationRetriever {
     /**
      * Load translations from classpath file or file list
      *
-     * @param paths File or file list on classpath of tab-separated translations (source <tab> translation)
+     * @param paths File or file list on classpath of tab-separated translations (source \t translation)
      * @return TranslationRetriever object holding translations
      */
     public static TranslationRetriever loadTranslations(String... paths) {
@@ -39,7 +39,7 @@ public class TranslationRetriever {
     /**
      * Load translations from classpath file or file list
      *
-     * @param paths File or file list on classpath of tab-separated translations (source <tab> translation)
+     * @param paths File or file list on classpath of tab-separated translations (source \t translation)
      * @return TranslationRetriever object holding translations
      */
     public static TranslationRetriever loadTranslationsFromFile(String... paths) {
