@@ -51,19 +51,44 @@ public class Sentence {
     public static Sentence fromSpanAnnotated(String text) {
 
         Sentence sentence = new Sentence();
-        String nerType = null;
-        for (String word : text.split(" ")) {
 
-            if (word.matches("<.*>")) {
-                nerType = word.replaceAll("<START:", "").replaceAll(">", "");
-                if (word.matches("<END>")) nerType = null;
-            } else {
-                Token token = sentence.newToken();
-                token.setText(word);
-                if (nerType != null) token.setNer(nerType);
+        int nerStart = -1;
+        int nerStop = -1;
+        String nerType = null;
+
+        int id = 0;
+        for (String word : text.split(" ")) {
+            if (word.matches("<.*") && (word.contains("START") || word.contains("END"))) continue;
+            Token token = sentence.newToken();
+            token.setText(word);
+        }
+
+        for (String word : text.split(" ")) {
+            id++;
+            if (word.matches("<.*") && (word.contains("START") || word.contains("END"))) {
+                id--;
+                if (word.startsWith("<START")) {
+                    nerType = word.replaceAll("<START:", "").replaceAll(">", "");
+                    nerStart = id + 1;
+                }
+                if (word.matches("<END>")) {
+                    nerStop = id;
+//                    System.out.println(nerType + " from " + nerStart + " to " + nerStop);
+
+                    sentence.addSpan("span", nerType, nerStart, nerStop);
+                }
             }
         }
         return sentence;
+    }
+
+    private void addSpan(String fNER, String nerType, int nerStart, int nerStop) {
+
+        this.getToken(nerStart).addAnnotation(fNER, "B-" + nerType);
+        for (int i = nerStart + 1; i <= nerStop; i++) {
+            this.getToken(i).addAnnotation(fNER, "I-" + nerType);
+        }
+
     }
 
     /**
@@ -232,6 +257,48 @@ public class Sentence {
         }
         return conllX.toString().trim();
     }
+
+    public String toSpanConll() {
+        return toSpanConll(Lists.newArrayList(), "span", true);
+    }
+
+    /**
+     * Render this sentence in conll-03 format with BIO tags for one type of annotation.
+     *
+     * @return sentence in conll-u format
+     */
+    public String toSpanConll(List<String> fields, String annotation, boolean tabSeparated) {
+
+        StringBuilder conllX = new StringBuilder();
+
+        for (int i = 0; i < this.tokens.size(); ++i) {
+
+            Token token = this.tokens.get(i);
+
+            if (fields.contains("id")) conllX.append(StringHelper.addWhitespaces(String.valueOf(token.getId()), 5));
+
+            conllX.append(StringHelper.addWhitespaces(token.getText(), StringHelper.lengthOfLongestInList(this.getTexts()) + 3));
+
+            if (fields.contains("lemma"))
+                conllX.append(StringHelper.addWhitespaces(token.getLemma(), StringHelper.lengthOfLongestInList(this.getLemmas()) + 3));
+
+            if (fields.contains("pos"))
+                conllX.append(StringHelper.addWhitespaces(token.getPosUniversal(), StringHelper.lengthOfLongestInList(this.getPosUniversal()) + 3));
+
+            if (fields.contains("pos_fine"))
+                conllX.append(StringHelper.addWhitespaces(token.getPos(), StringHelper.lengthOfLongestInList(this.getPos()) + 3));
+
+            if (fields.contains("morph"))
+                conllX.append(StringHelper.addWhitespaces(token.getMorph(), StringHelper.lengthOfLongestInList(this.getMorph()) + 3));
+
+            conllX.append(token.getAnnotation(annotation));
+            conllX.append("\n");
+        }
+        String conll03 = conllX.toString().trim();
+        if (tabSeparated) conll03 = conll03.replaceAll("  +", "\t");
+        return conll03;
+    }
+
 
     @Override
     public String toString() {

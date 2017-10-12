@@ -37,8 +37,25 @@ public class AnnotationTransfer {
                 aligned.setPosUniversal(tokenSL.getPosUniversal());
                 aligned.setPos(tokenSL.getPos());
 
-                if (!tokenSL.getNer().equals("_"))
-                    aligned.setNer(tokenSL.getNer());
+//                if (!tokenSL.getNer().equals("_"))
+//                    aligned.setNer(tokenSL.getNer());
+            }
+        }
+    }
+
+    public void transferSpans(BiSentence biSentence){
+
+        // Iterate through each token in source sentence
+        for (Token tokenSL : biSentence.getSentenceSL().getTokens()) {
+
+            // If we can align the source token, project PoS
+            Token aligned = biSentence.getAligned(tokenSL);
+            if (aligned != null) {
+                aligned.setPosUniversal(tokenSL.getPosUniversal());
+                aligned.setPos(tokenSL.getPos());
+
+                if (!tokenSL.getMisc().equals("_"))
+                    aligned.setMisc(tokenSL.getMisc());
             }
         }
     }

@@ -7,7 +7,7 @@
     <groupId>org.zalando.research</groupId>
     <artifactId>zap</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
 
     <name>ZAP</name>
     <description>

@@ -327,6 +327,23 @@ public class Token implements Comparable<Token> {
         return UNSET;
     }
 
+    public Token addAnnotation(String type, String annotation) {
+        if (annotation.equals("_"))
+            return this;
+
+        if (this.misc.equals("_")) this.misc = type + "=" + annotation;
+        else this.misc += " " + type + "=" + annotation;
+
+        return this;
+    }
+
+    public String getAnnotation(String type){
+        for (String field : this.misc.split(" ")) {
+            if (field.startsWith(type + "=")) return field.replaceFirst(type + "=", "");
+        }
+        return UNSET;
+    }
+
     public Token setNer(String ner) {
 
         if (ner.equals("_"))
